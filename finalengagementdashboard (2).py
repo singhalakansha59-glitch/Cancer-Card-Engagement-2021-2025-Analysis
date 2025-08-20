@@ -94,26 +94,21 @@ DEFAULT_PATHS: Iterable[Path] = (
 
 def _normalize(col: str) -> str:
     return (
-        str(col)
-        .strip()
-        .lower()
-        .replace(" ", "_")
-        .replace("-", "_")
-        .replace("/", "_")
-        .replace("(", "")
-        .replace(")", "")
-        .replace(".", "")
-        .replace("__", "_")
+        col.strip()
+           .lower()
+           .replace(" ", "_")
+           .replace("-", "_")
+           .replace("/", "_")
+           .replace("(", "")
+           .replace(")", "")
+           .replace(".", "")
+           .replace("__", "_")
     )
-
-def _build_map(cols: Iterable[str]) -> Dict[str, str]:
-    
-    return {_normalize(c): c for c in cols}
 
 
 DATE_CANDIDATES = {"date", "day", "ds", "datetime", "timestamp", "report_date"}
 NEW_USERS_CANDS = {"new_users", "newusers", "new_user", "new", "users_new"}
-RET_USERS_CANDS = {"returning_users", "returningusers", "returning_user", "returning", "users_returning", "ret_users"}
+RET_USERS_CANDS = {"returning_users", "returningusers", "returning_user", "users_returning", "ret_users"}
 TIME_ENG_CANDS  = {
     "time_engaged_per_session", "time_engaged", "engagement_time",
     "avg_session_time", "average_session_time", "time_per_session",
@@ -450,4 +445,5 @@ with st.expander("About this dashboard"):
         - Forecasting via Prophet (if installed) or a linear-regression fallback
         """
     )
+
 
