@@ -5,15 +5,15 @@ from __future__ import annotations
 import warnings
 warnings.filterwarnings("ignore")
 
-from pathlib import Path
 from typing import Optional, Dict, Iterable, Union, IO
-
-import numpy as np
+from pathlib import Path
 import pandas as pd
+import numpy as np
+import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from sklearn.linear_model import LinearRegression
-import streamlit as st
+
 
 try:
     from prophet import Prophet
@@ -92,19 +92,30 @@ DEFAULT_PATHS: Iterable[Path] = (
     Path(r"C:\Users\akans\Documents\engagement_2021_2025_merged.csv"),  # original path (optional)
 )
 
+from typing import Optional, Dict, Iterable, Union, IO
+from pathlib import Path
+import pandas as pd
+import numpy as np
+import streamlit as st
+
+
 def _normalize(col: str) -> str:
     return (
-        col.strip()
-           .lower()
-           .replace(" ", "_")
-           .replace("-", "_")
-           .replace("/", "_")
-           .replace("(", "")
-           .replace(")", "")
-           .replace(".", "")
-           .replace("__", "_")
+        str(col)
+        .strip()
+        .lower()
+        .replace(" ", "_")
+        .replace("-", "_")
+        .replace("/", "_")
+        .replace("(", "")
+        .replace(")", "")
+        .replace(".", "")
+        .replace("__", "_")
     )
 
+def _build_map(cols: Iterable[str]) -> Dict[str, str]:
+   
+    return {_normalize(c): c for c in cols}
 
 DATE_CANDIDATES = {"date", "day", "ds", "datetime", "timestamp", "report_date"}
 NEW_USERS_CANDS = {"new_users", "newusers", "new_user", "new", "users_new"}
@@ -119,7 +130,7 @@ def _read_csv_any(src: Union[Path, IO[bytes], IO[str]]) -> pd.DataFrame:
     try:
         return pd.read_csv(src)
     except UnicodeDecodeError:
-        if hasattr(src, "seek"):  
+        if hasattr(src, "seek"):
             src.seek(0)
         return pd.read_csv(src, encoding="utf-8", engine="python", on_bad_lines="skip")
 
@@ -445,5 +456,6 @@ with st.expander("About this dashboard"):
         - Forecasting via Prophet (if installed) or a linear-regression fallback
         """
     )
+
 
 
